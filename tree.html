@@ -1,0 +1,99 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: zhang jianjun
+ * @Date: 2023-04-07 15:06:00
+ * @LastEditors: zhang jianjun
+ * @LastEditTime: 2023-04-07 17:07:35
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+  <title>tree</title>
+  <script src="./redBlackTree.js"></script>
+  <style>
+    .red-black-tree {
+      width: 500px;
+      height: 500px;
+      border: 1px solid red;
+    }
+    .node {
+      display: flex;
+      justify-content: center;
+    }
+    .round {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      text-align: center;
+      line-height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="red-black-tree">
+      <div v-for="item in arr" :key="item">
+        <div class="node">
+          <div class="round">{{item}}</div>
+          <div class="left-line"></div>
+          <div class="right-line"></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <input type="text" v-model="value">
+      <button @click="insert">插入</button>
+    </div>
+  </div>
+  <script>
+    const redBlackTree = new RedBlackTree()
+    var vm = new Vue({
+      el: '#app',
+      data() {
+        return {
+          tree: redBlackTree,
+          value: '',
+        }
+      },
+      methods: {
+        insert(value = this.value) {
+          if(value) {
+            this.tree.insert(value)
+          }
+        },
+      },
+      mounted() {
+        this.insert(10)
+        this.insert(12)
+        this.insert(14)
+        this.insert(16)
+        this.insert(18)
+      },
+      render(h) {
+        function getNode(node) {
+          if(node == null) return null
+          const value = h('div',{
+            style: {
+              color: node.color == 1 ? '#f00' : '#000',
+              display: node.parent ? 'inline-block' : 'flex',
+            }
+          },node.value)
+          const left = getNode(node.left)
+          const right = getNode(node.right)
+          return [value, left, right]
+        }
+        const root = this.tree.getTree()
+        console.log(root)
+        return h('div', getNode(root))
+      }
+    })
+  </script>
+</body>
+</html>
